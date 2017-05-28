@@ -13,14 +13,14 @@ class imageClass {
     
     struct image{
 
-        var caption:String!
+        var caption:String?
         var image:String!
         
         init(jsonDict:NSDictionary){
              let myLine = jsonDict as! [String: Any];
             
             //if it's not there it would be nil
-            caption = myLine["caption"] as! String
+            caption = myLine["caption"] as? String
             image = myLine["url"] as! String
         }
     }
