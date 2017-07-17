@@ -8,24 +8,26 @@
 
 import Foundation
 
+
+/// IDX Broker Leads JSON Struct
 class leadsClass {
     
-    struct property {
+    struct lead {
         var address:String?
         var agentOwner:Int?
         var canLogin:String?
-        var city:String?
+        var city:String!
         var country:String?
         var customRegistrationField:String?
         var disabled:String?
-        var email:String?
+        var email:String!
         var email2:String?
-        var firstName:String?
-        var id:Int?
+        var firstName:String!
+        var id:String?
         var lastActivityDate:String?
         var lastEdited:String?
-        var lastName:String?
-        var phone:String?
+        var lastName:String!
+        var phone:String!
         var receiveUpdates:String?
         var savedProperties:Int?
         var savedSearches:Int?
@@ -33,32 +35,33 @@ class leadsClass {
         var subscribeDate:String?
         var zipCode:String?
 
-        init(jsonDict:NSDictionary){
+        init(leadDict:NSDictionary){
+            let myLine = leadDict as! [String: Any];
+            
             //if it's not there it would be nil
-            address = jsonDict["address"] as? String
-            agentOwner = jsonDict["agentOwner"] as? Int
-            canLogin = jsonDict["canLogin"] as? String
-            city = jsonDict["city"] as? String
-            country = jsonDict["country"] as? String
-            customRegistrationField = jsonDict["customRegistrationField"] as? String
-            disabled = jsonDict["disabled"] as? String
-            email = jsonDict["email"] as? String
-            email2 = jsonDict["email2"] as? String
-            firstName = jsonDict["firstName"] as? String
-            id = jsonDict["id"] as? Int
-            lastActivityDate = jsonDict["lastActivityDate"] as? String
-            lastEdited = jsonDict["lastEdited"] as? String
-            lastName = jsonDict["lastName"] as? String
-            phone = jsonDict["phone"] as? String
-            receiveUpdates = jsonDict["receiveUpdates"] as? String
-            savedProperties = jsonDict["savedProperties"] as? Int
-            savedSearches = jsonDict["savedSearches"] as? Int
-            stateProvince = jsonDict["stateProvince"] as? String
-            subscribeDate = jsonDict["subscribeDate"] as? String
-            zipCode = jsonDict["zipCode"] as? String
+            address = myLine["address"] as? String
+            agentOwner = myLine["agentOwner"] as? Int
+            canLogin = myLine["canLogin"] as? String
+            city = myLine["city"] as! String
+            country = myLine["country"] as? String
+            customRegistrationField = myLine["customRegistrationField"] as? String
+            disabled = myLine["disabled"] as? String
+            email = myLine["email"] as! String
+            email2 = myLine["email2"] as? String
+            firstName = myLine["firstName"] as! String
+            id = (myLine["id"] as? String?)!
+            lastActivityDate = myLine["lastActivityDate"] as? String
+            lastEdited = myLine["lastEdited"] as? String
+            lastName = myLine["lastName"] as! String
+            phone = myLine["phone"] as? String
+            receiveUpdates = myLine["receiveUpdates"] as? String
+            savedProperties = myLine["savedProperties"] as? Int
+            savedSearches = myLine["savedSearches"] as? Int
+            stateProvince = myLine["stateProvince"] as? String
+            subscribeDate = myLine["subscribeDate"] as? String
+            zipCode = myLine["zipCode"] as? String
 
         }
     }
-
     
 }

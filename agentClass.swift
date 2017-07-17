@@ -8,7 +8,7 @@
 
 import Foundation
 
-
+/// IDB Broker JSON Class
 class agentClass {
     
     struct agent{
@@ -20,11 +20,11 @@ class agentClass {
         var agentContactPhone:String?
         var agentDisplayName:String?
         var agentEmail:String?
-        var agentFirstName:String?
+        var agentFirstName:String!
         var agentHomeFax:String?
         var agentHomePhone:String?
         var agentID:Int?
-        var agentLastName:String?
+        var agentLastName:String!
         var agentOfficeFax:String?
         var agentOfficePhone:String?
         var agentPager:String?
@@ -45,9 +45,6 @@ class agentClass {
         var stateProvince:String?
         var zipCode:String?
         
-
-
-    
         init(jsonDict:NSDictionary){
             //if it's not there it would be nil
             accountCreated = jsonDict["accountCreated"] as! String?

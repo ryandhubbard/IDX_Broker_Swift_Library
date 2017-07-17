@@ -8,17 +8,19 @@
 
 import Foundation
 
+
+/// IDK Broker Featured JSON Struct
 class featuredClass {
     
     struct property {
-        var address:String?
+        var address:String!
         var streetName:String?
         var streetNumber:String?
         var unitNumber:String?
-        var cityName:String?
+        var cityName:String!
         var countyName:String?
-        var state:String?
-        var zipcode:String?
+        var state:String!
+        var zipcode:String!
         var listingPrice:String?
         var listingID:String?
         var remarksConcat:String?
@@ -45,7 +47,7 @@ class featuredClass {
         var ohCount:String?
         var vtCount:String?
         var featured:String?
-        var image:[NSData]? // maybe UIImage or smthg.
+        var image:NSDictionary? // maybe UIImage or smthg.
         var fullDetailsURL:String?
     
     
@@ -82,12 +84,12 @@ class featuredClass {
             idxID = jsonDict["idxID"] as? String
             idxPropType = jsonDict["idxPropType"] as? String
             idxStatus = jsonDict["idxStatus"] as? String
-            viewCount = jsonDict["viewCoun"] as? String
+            viewCount = jsonDict["viewCount"] as? String
             mediaData = jsonDict["mediaData "] as? NSArray as? [NSData]
             ohCount = jsonDict["ohCount"] as? String
             vtCount = jsonDict["vtCount"] as? String
             featured = jsonDict["featured"] as? String
-            image = jsonDict["image"] as? NSArray as? [NSData]
+            image = jsonDict["image"] as? NSDictionary
             fullDetailsURL = jsonDict["fullDetailsURL"] as? String
         }
     }
