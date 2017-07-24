@@ -1,66 +1,96 @@
 //
 //  APICalls.swift
 //
+// IDB Broker API Call Library
+// @see http://middleware.idxbroker.com/docs/api/methods/index.html#api-
+//
 //  Created by Ryan Hubbard on 4/2/17.
 //  Copyright © 2017 Ryan Hubbard. All rights reserved.
 //
 
 import Foundation
 
-/// IDB Broker API Call Library
 class APICalls {
-    
-    let apiKey = "API_Key_Here"
-    
-    class func get(string: NSURL) -> URLRequest {
-        var downloadTask = URLRequest(url: (url as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
-        /******************** Add Headers required for API CALL *************************************/
+
+    ///  Gets Users AccessKey
+    /// A method to get the users unique api key stored in the users defaults
+    ///
+    /// - Returns: A String
+    class func getAccessKey() -> String {
+        var key = "AccessKey"
+
+        return key
+    }
+
+
+    class func get(url: String) -> URLRequest {
+        let urlCall = NSURL(string: url)
+        var downloadTask = URLRequest(url: (urlCall as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
+        /* ******************* Add Headers required for API CALL ************************************ */
         downloadTask.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        downloadTask.setValue(apiKey, forHTTPHeaderField: "accesskey")
+        downloadTask.setValue(APICalls.getAccessKey(), forHTTPHeaderField: "accesskey")
         downloadTask.setValue("json", forHTTPHeaderField: "outputtype")
         downloadTask.httpMethod = "GET"
-        /******************** End Headers required for API CALL *************************************/
-        
+        /* ******************* End Headers required for API CALL ************************************ */
+
         return downloadTask
     }
 
-    class func put(string: NSURL, data: Data) -> URLRequest {
-        var downloadTask = URLRequest(url: (url as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
-        /******************** Add Headers required for API CALL *************************************/
+    class func put(url: String, data: Data) {
+        let urlCall = NSURL(string: url)
+        var downloadTask = URLRequest(url: (urlCall as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
+        /* ******************* Add Headers required for API CALL ************************************ */
         downloadTask.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         downloadTask.setValue(APICalls.getAccessKey(), forHTTPHeaderField: "accesskey")
         downloadTask.setValue("json", forHTTPHeaderField: "outputtype")
         downloadTask.httpMethod = "PUT"
         downloadTask.httpBody = data
-        /******************** End Headers required for API CALL *************************************/
+        /* ******************* End Headers required for API CALL ************************************ */
 
-        return downloadTask
+        URLSession.shared.dataTask(with: downloadTask, completionHandler: { (data, response, error) -> Void in
+
+            /// Status Returned from API CALL
+            if let httpResponse = response as? HTTPURLResponse {
+                print("statusCode: \(httpResponse.statusCode)")
+            }
+
+        }).resume()
+        /* ******* End URL Session ********* */
     }
 
-    class func post(string: NSURL, data: Data) -> URLRequest {
-        var downloadTask = URLRequest(url: (url as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
-        /******************** Add Headers required for API CALL *************************************/
+    class func post(url: String, data: Data) -> URLRequest {
+        let urlCall = NSURL(string: url)
+        var downloadTask = URLRequest(url: (urlCall as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
+        /* ******************* Add Headers required for API CALL ************************************ */
         downloadTask.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         downloadTask.setValue(APICalls.getAccessKey(), forHTTPHeaderField: "accesskey")
         downloadTask.setValue("json", forHTTPHeaderField: "outputtype")
         downloadTask.httpMethod = "POST"
         downloadTask.httpBody = data
-        /******************** End Headers required for API CALL *************************************/
+        /* ******************* End Headers required for API CALL ************************************ */
 
         return downloadTask
     }
 
-    class func delete(string: NSURL, data: Data) -> URLRequest {
-        var downloadTask = URLRequest(url: (url as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
-        /******************** Add Headers required for API CALL *************************************/
+    class func delete(url: String) {
+        let urlCall = NSURL(string: url)
+        var downloadTask = URLRequest(url: (urlCall as URL?)!, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 20)
+        /* ******************* Add Headers required for API CALL ************************************ */
         downloadTask.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         downloadTask.setValue(APICalls.getAccessKey(), forHTTPHeaderField: "accesskey")
         downloadTask.setValue("json", forHTTPHeaderField: "outputtype")
         downloadTask.httpMethod = "DELETE"
-        downloadTask.httpBody = data
-        /******************** End Headers required for API CALL *************************************/
+        /* ******************* End Headers required for API CALL ************************************ */
 
-        return downloadTask
+        URLSession.shared.dataTask(with: downloadTask, completionHandler: { (data, response, error) -> Void in
+
+            /// Status Returned from API CALL
+            if let httpResponse = response as? HTTPURLResponse {
+                print("statusCode: \(httpResponse.statusCode)")
+            }
+
+        }).resume()
+        /* ******* End URL Session ********* */
     }
 
 
@@ -73,7 +103,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedAgents() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedagents"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -84,10 +114,10 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedFeatured() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedfeatured"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
-    
+
     /// aggregatedleads GET
     ///
     /// Get a list of all leads.
@@ -95,10 +125,10 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedLeads() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedleads"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
-    
+
     /// aggregatedleadtraffic GET
     ///
     /// Get a list of all leads traffic history.
@@ -106,7 +136,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedLeadTraffic() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedleadtraffic"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -117,10 +147,10 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedListingStatus() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedlistingstatus"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
-    
+
     /// aggregatedproperties GET
     ///
     /// Get a list of all lead saved properties.
@@ -128,7 +158,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedProperties() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedproperties"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -139,7 +169,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedSearches() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedsearches"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -150,7 +180,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAggregatedSoldPending() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedsoldpending"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -159,9 +189,9 @@ class APICalls {
     /// Get a list of supplemental (non-MLS) properties.
     ///
     /// - Returns: URL Request
-    class func getAggregatedAgents() -> URLRequest {
+    class func getAggregatedSupplemental() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/aggregatedsupplemental"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -170,9 +200,9 @@ class APICalls {
     /// Get the default api version.
     ///
     /// - Returns: URL Request
-    class func getApiVersion() -> URLRequest {
+    class func getPartnersApiVersion() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/apiversion"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -183,7 +213,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAvailableMls() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/availablemls"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -194,7 +224,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getClients() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/clients"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -203,9 +233,9 @@ class APICalls {
     /// This is a simple, access anywhere, method for getting a list of all API components available.
     ///
     /// - Returns: URL Request
-    class func getListComponents() -> URLRequest {
+    class func getPartnersListComponents() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/listcomponents"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -216,7 +246,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getListMethods() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/listmethods"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -227,7 +257,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getPropertyTypes() -> URLRequest {
         let urlString = "https://api.idxbroker.com/partners/propertytypes"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -242,7 +272,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAccountType() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/accounttype"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -253,7 +283,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getAgents() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/agents"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -264,7 +294,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getApiVersion() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/apiversion"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -275,7 +305,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getCities() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/cities"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -286,7 +316,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getCitiesListName() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/citieslistname"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -297,7 +327,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getCounties() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/counties"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -308,7 +338,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getCountiesListName() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/countieslistname"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -317,9 +347,9 @@ class APICalls {
     /// Returns the IDs and names for each of a client's counties lists including MLS counties lists. To get the list of all counties lists available do not send the primary request ID. The default list on each account has the ID combinedActiveMLS
     ///
     /// - Returns: URL Request
-    class func postDynamicWrapperUrl() -> URLRequest {
+    class func postDynamicWrapperUrl(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/dynamicwrapperurl"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -330,7 +360,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getFeatured() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/featured"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -341,7 +371,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getListAllowedFields() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/listallowedfields"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -352,7 +382,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getListComponents() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/listcomponents"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -363,7 +393,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getListing() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/listing"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -374,7 +404,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getListingMehtods() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/listmethods"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -385,7 +415,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getOffices() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/offices"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -396,7 +426,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getPostalCodes() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/postalcodes"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -408,7 +438,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getPostalCodesListName() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/postalcodeslistname"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -420,7 +450,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getProperties() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/properties"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -429,10 +459,9 @@ class APICalls {
     /// Remove a new client saved link.
     ///
     /// - Returns: URL Request
-    class func deleteSavedLinks() -> URLRequest {
+    class func deleteSavedLinks() {
         let urlString = "https://api.idxbroker.com/clients/savedlinks"
-        var downloadTask = delete(urlString)
-        return downloadTask
+        delete(url: urlString)
     }
 
     /// savedlinks GET
@@ -442,7 +471,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getSavedLinks() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/savedlinks"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -451,9 +480,9 @@ class APICalls {
     /// Update an existing client's saved link. NOTE: This method is to be used at your own risk. We will NOT be held accountable for programmatic errors in your code or the improper use of search values or options within said values resulting in broken saved links.
     ///
     /// - Returns: URL Request
-    class func postSavedLinks() -> URLRequest {
+    class func postSavedLinks(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/savedlinks"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -464,7 +493,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getSearchQuery() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/searchquery"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -475,7 +504,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getSoldPending() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/soldpending"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -484,10 +513,9 @@ class APICalls {
     /// Remove a clients supplemental property. NOTE: This method is to be used at your own risk. We will NOT be held accountable for programmatic errors in your code or the improper use of search values or options within said values resulting in deletion of supplemental properties.
     ///
     /// - Returns: URL Request
-    class func deleteSupplemental() -> URLRequest {
+    class func deleteSupplemental() {
         let urlString = "https://api.idxbroker.com/clients/soldpending"
-        var downloadTask = delete(urlString)
-        return downloadTask
+        delete(url: urlString)
     }
 
     /// supplemental GET
@@ -497,7 +525,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getSupplemental() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/supplemental"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -506,9 +534,9 @@ class APICalls {
     /// Update an existing supplemental listing. Note: if updating images, existing images are deleted and the new images are inserted instead for the listing.
     ///
     /// - Returns: URL Request
-    class func postSupplemental() -> URLRequest {
+    class func postSupplemental(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/supplemental"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -517,10 +545,9 @@ class APICalls {
     /// Create a new supplemental listing. Note: likeIdxID and likeMlsPtID fields are required.
     ///
     /// - Returns: URL Request
-    class func putSupplemental() -> URLRequest {
+    class func putSupplemental(data: Data) {
         let urlString = "https://api.idxbroker.com/clients/supplemental"
-        var downloadTask = put(urlString)
-        return downloadTask
+        put(url: urlString, data: data)
     }
 
     /// systemlinks GET
@@ -530,7 +557,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getSystemLinks() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/systemlinks"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -541,7 +568,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getWidgetSrc() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/widgetsrc"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -550,10 +577,9 @@ class APICalls {
     ///
     ///
     /// - Returns: URL Request
-    class func deleteWrapperCache() -> URLRequest {
+    class func deleteWrapperCache() {
         let urlString = "https://api.idxbroker.com/clients/wrappercache"
-        var downloadTask = delete(urlString)
-        return downloadTask
+        delete(url: urlString)
     }
 
     /// zipcodes GET
@@ -563,7 +589,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getZipCodes() -> URLRequest {
         let urlString = "https://api.idxbroker.com/clients/zipcodes"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -578,7 +604,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsAge() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/age"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -589,7 +615,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsApprovedMls() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/approvedmls"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -600,7 +626,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsCities() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/cities"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -611,7 +637,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsCounties() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/counties"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -622,7 +648,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsListComponents() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/listcomponents"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -633,7 +659,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsListMethods() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/listmethods"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -644,7 +670,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsPostalCodes() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/postalcodes"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -655,7 +681,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsPrices() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/prices"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -666,7 +692,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsPropertyCount() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/propertycount"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -677,7 +703,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsPropertyTypes() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/propertytypes"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -688,7 +714,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsSearchFields() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/searchfields"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -699,7 +725,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsSearchFieldValues() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/searchfieldvalues"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -710,7 +736,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getMlsZipCodes() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/zipcodes"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -723,9 +749,9 @@ class APICalls {
     /// Update leads in batches of up to 100 per request.
     ///
     /// - Returns: URL Request
-    class func postBulkLead() -> URLRequest {
+    class func postBulkLead(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/bulklead"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -734,10 +760,9 @@ class APICalls {
     /// Add leads in batches of up to 100 per request.
     ///
     /// - Returns: URL Request
-    class func putBulkLead() -> URLRequest {
+    class func putBulkLead(data: Data) {
         let urlString = "https://api.idxbroker.com/leads/bulklead"
-        var downloadTask = put(urlString)
-        return downloadTask
+        put(url: urlString, data: data)
     }
 
     /// Leads - lead DELETE
@@ -745,10 +770,9 @@ class APICalls {
     /// Remove a lead system wide. NOTE: This method is to be used at your own risk. We will NOT be held accountable for programmatic errors in your code or the improper use of search values or options within said values resulting in deletion of leads.
     ///
     /// - Returns: URL Request
-    class func deleteLead() -> URLRequest {
-        let urlString = "https://api.idxbroker.com/leads/lead"
-        var downloadTask = delete(urlString)
-        return downloadTask
+    class func deleteLead(leadID: String) {
+        let urlString = "https://api.idxbroker.com/leads/lead" + "/" + leadID
+        delete(url: urlString)
     }
 
     /// Leads - lead GET
@@ -758,7 +782,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getLead() -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/lead"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -767,9 +791,9 @@ class APICalls {
     /// Update the information for one lead specified by the primary request ID.
     ///
     /// - Returns: URL Request
-    class func postLead() -> URLRequest {
+    class func postLead(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/lead"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -778,10 +802,9 @@ class APICalls {
     /// Create a new lead. Special Note: Currently the API cannot differentiate between a lead rejected due to server error or one rejected due to bad email address. The lead system requires email addresses that are correctly formatted to cut down on garbage accounts, and they need to have a valid MX record. Most 500 error from this method are a result of bad email addresses. In future versions we will differentiate the error and make the MX record requirement optional.
     ///
     /// - Returns: URL Request
-    class func putLead() -> URLRequest {
+    class func putLead(data: Data) {
         let urlString = "https://api.idxbroker.com/leads/lead"
-        var downloadTask = put(urlString)
-        return downloadTask
+        put(url: urlString, data: data)
     }
 
     /// Leads - leadtraffic GET
@@ -791,7 +814,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getLeadTraffic() -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/leadtraffic"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -802,7 +825,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getLeadsListComponents() -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/listcomponents"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -813,7 +836,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getLeadsListMethods() -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/listmethods"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -822,10 +845,9 @@ class APICalls {
     /// Remove a lead note.
     ///
     /// - Returns: URL Request
-    class func deleteNote() -> URLRequest {
+    class func deleteNote() {
         let urlString = "https://api.idxbroker.com/leads/note"
-        var downloadTask = delete(urlString)
-        return downloadTask
+        delete(url: urlString)
     }
 
     /// Leads - note GET
@@ -835,7 +857,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getNote() -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/note"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -844,9 +866,9 @@ class APICalls {
     /// Update the notes information for one lead specified by the primary request ID.
     ///
     /// - Returns: URL Request
-    class func postNote() -> URLRequest {
+    class func postNote(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/note"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -855,10 +877,9 @@ class APICalls {
     /// Create a new lead note.
     ///
     /// - Returns: URL Request
-    class func putNote() -> URLRequest {
+    class func putNote(data: Data) {
         let urlString = "https://api.idxbroker.com/leads/note"
-        var downloadTask = put(urlString)
-        return downloadTask
+        put(url: urlString, data: data)
     }
 
     /// Leads - property DELETE
@@ -866,10 +887,9 @@ class APICalls {
     /// Remove a lead saved property.
     ///
     /// - Returns: URL Request
-    class func deleteNote() -> URLRequest {
-        let urlString = "https://api.idxbroker.com/leads/property"
-        var downloadTask = delete(urlString)
-        return downloadTask
+    class func deleteProperty(leadID: String, propertyID: String) {
+        let urlString = "https://api.idxbroker.com/leads/property" + "/" + leadID + "/" + propertyID
+        delete(url: urlString)
     }
 
     /// Leads - property GET
@@ -877,9 +897,9 @@ class APICalls {
     /// Get saved properties for a lead.
     ///
     /// - Returns: URL Request
-    class func getNote() -> URLRequest {
+    class func getProperty(leadID: String, propertyID: String) -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/property"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -888,9 +908,9 @@ class APICalls {
     /// Update an existing lead's saved property.
     ///
     /// - Returns: URL Request
-    class func postNote() -> URLRequest {
+    class func postProperty(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/property"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -899,10 +919,9 @@ class APICalls {
     /// Create a new lead saved property.
     ///
     /// - Returns: URL Request
-    class func putNote() -> URLRequest {
-        let urlString = "https://api.idxbroker.com/leads/property"
-        var downloadTask = put(urlString)
-        return downloadTask
+    class func putProperty(leadID: String, data: Data) {
+        let urlString = "https://api.idxbroker.com/leads/property" + "/" + leadID
+        put(url: urlString, data: data)
     }
 
     /// Leads - search DELETE
@@ -910,10 +929,9 @@ class APICalls {
     /// Remove a lead saved search.
     ///
     /// - Returns: URL Request
-    class func deleteSearch() -> URLRequest {
+    class func deleteSearch() {
         let urlString = "https://api.idxbroker.com/leads/search"
-        var downloadTask = delete(urlString)
-        return downloadTask
+        delete(url: urlString)
     }
 
     /// Leads - search GET
@@ -923,7 +941,7 @@ class APICalls {
     /// - Returns: URL Request
     class func getSearch() -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/search"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
 
@@ -932,9 +950,9 @@ class APICalls {
     /// Update the notes information for one lead specified by the primary request ID.
     ///
     /// - Returns: URL Request
-    class func postSearch() -> URLRequest {
+    class func postSearch(data: Data) -> URLRequest {
         let urlString = "https://api.idxbroker.com/leads/search"
-        var downloadTask = post(urlString)
+        let downloadTask = post(url: urlString, data: data)
         return downloadTask
     }
 
@@ -943,10 +961,9 @@ class APICalls {
     /// Create a new lead note.
     ///
     /// - Returns: URL Request
-    class func putSearch() -> URLRequest {
+    class func putSearch(data: Data) {
         let urlString = "https://api.idxbroker.com/leads/search"
-        var downloadTask = put(urlString)
-        return downloadTask
+        put(url: urlString, data: data)
     }
 
     /* END LEADS */
@@ -960,22 +977,21 @@ class APICalls {
     /// - Returns: URL Request
     class func getPricing() -> URLRequest {
         let urlString = "https://api.idxbroker.com/specialtypartner/pricing"
-        var downloadTask = get(urlString)
+        let downloadTask = get(url: urlString)
         return downloadTask
     }
-
+    
     /// subscriber PUT
     ///
     /// Create IDX subscriber.
     ///
     /// - Returns: URL Request
-    class func putSubscriber(data: Data) -> URLRequest {
+    class func putSubscriber(data: Data) {
         let urlString = "https://api.idxbroker.com/specialtypartner/subscriber"
-        var downloadTask = put(urlString, data)
-        return downloadTask
+        put(url: urlString, data: data)
     }
-
+    
     /* End Specialty Partner */
-
-
+    
+    
 }
