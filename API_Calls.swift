@@ -705,7 +705,8 @@ class APICalls {
 
     /// MLS - zipcodes GET
     ///
-    /// All zip codes represented in the current set of MLS data are available from this method. The output can be filtered using additional GET parameters.///
+    /// All zip codes represented in the current set of MLS data are available from this method. The output can be filtered using additional GET parameters.
+    ///
     /// - Returns: URL Request
     class func getMlsZipCodes() -> URLRequest {
         let urlString = "https://api.idxbroker.com/mls/zipcodes"
@@ -717,7 +718,236 @@ class APICalls {
 
     /* LEADS */
 
+    /// Leads - bulklead POST
+    ///
+    /// Update leads in batches of up to 100 per request.
+    ///
+    /// - Returns: URL Request
+    class func postBulkLead() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/bulklead"
+        var downloadTask = post(urlString)
+        return downloadTask
+    }
 
+    /// Leads - bulklead PUT
+    ///
+    /// Add leads in batches of up to 100 per request.
+    ///
+    /// - Returns: URL Request
+    class func putBulkLead() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/bulklead"
+        var downloadTask = put(urlString)
+        return downloadTask
+    }
+
+    /// Leads - lead DELETE
+    ///
+    /// Remove a lead system wide. NOTE: This method is to be used at your own risk. We will NOT be held accountable for programmatic errors in your code or the improper use of search values or options within said values resulting in deletion of leads.
+    ///
+    /// - Returns: URL Request
+    class func deleteLead() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/lead"
+        var downloadTask = delete(urlString)
+        return downloadTask
+    }
+
+    /// Leads - lead GET
+    ///
+    /// Get information for one or multiple leads.
+    ///
+    /// - Returns: URL Request
+    class func getLead() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/lead"
+        var downloadTask = get(urlString)
+        return downloadTask
+    }
+
+    /// Leads - lead POST
+    ///
+    /// Update the information for one lead specified by the primary request ID.
+    ///
+    /// - Returns: URL Request
+    class func postLead() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/lead"
+        var downloadTask = post(urlString)
+        return downloadTask
+    }
+
+    /// Leads - lead PUT
+    ///
+    /// Create a new lead. Special Note: Currently the API cannot differentiate between a lead rejected due to server error or one rejected due to bad email address. The lead system requires email addresses that are correctly formatted to cut down on garbage accounts, and they need to have a valid MX record. Most 500 error from this method are a result of bad email addresses. In future versions we will differentiate the error and make the MX record requirement optional.
+    ///
+    /// - Returns: URL Request
+    class func putLead() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/lead"
+        var downloadTask = put(urlString)
+        return downloadTask
+    }
+
+    /// Leads - leadtraffic GET
+    ///
+    /// Get traffic history for a specified lead. For bandwidth and memory considerations there is a limit of 5,000 on the number of lead traffics that can be returned in any single request.
+    ///
+    /// - Returns: URL Request
+    class func getLeadTraffic() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/leadtraffic"
+        var downloadTask = get(urlString)
+        return downloadTask
+    }
+
+    /// Leads - listcomponents GET
+    ///
+    /// This is a simple, access anywhere, method for getting a list of all API components available.
+    ///
+    /// - Returns: URL Request
+    class func getLeadsListComponents() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/listcomponents"
+        var downloadTask = get(urlString)
+        return downloadTask
+    }
+
+    /// Leads - listmethods GET
+    ///
+    /// A simple method for listing all available methods in the current API component. This method will also list which request methods (GET, PUT, POST, or DELETE) are supported by each method in addition to each method status.
+    ///
+    /// - Returns: URL Request
+    class func getLeadsListMethods() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/listmethods"
+        var downloadTask = get(urlString)
+        return downloadTask
+    }
+
+    /// Leads - note DELETE
+    ///
+    /// Remove a lead note.
+    ///
+    /// - Returns: URL Request
+    class func deleteNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/note"
+        var downloadTask = delete(urlString)
+        return downloadTask
+    }
+
+    /// Leads - note GET
+    ///
+    /// Get notes for a lead.
+    ///
+    /// - Returns: URL Request
+    class func getNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/note"
+        var downloadTask = get(urlString)
+        return downloadTask
+    }
+
+    /// Leads - note POST
+    ///
+    /// Update the notes information for one lead specified by the primary request ID.
+    ///
+    /// - Returns: URL Request
+    class func postNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/note"
+        var downloadTask = post(urlString)
+        return downloadTask
+    }
+
+    /// Leads - note PUT
+    ///
+    /// Create a new lead note.
+    ///
+    /// - Returns: URL Request
+    class func putNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/note"
+        var downloadTask = put(urlString)
+        return downloadTask
+    }
+
+    /// Leads - property DELETE
+    ///
+    /// Remove a lead saved property.
+    ///
+    /// - Returns: URL Request
+    class func deleteNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/property"
+        var downloadTask = delete(urlString)
+        return downloadTask
+    }
+
+    /// Leads - property GET
+    ///
+    /// Get saved properties for a lead.
+    ///
+    /// - Returns: URL Request
+    class func getNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/property"
+        var downloadTask = get(urlString)
+        return downloadTask
+    }
+
+    /// Leads - property POST
+    ///
+    /// Update an existing lead's saved property.
+    ///
+    /// - Returns: URL Request
+    class func postNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/property"
+        var downloadTask = post(urlString)
+        return downloadTask
+    }
+
+    /// Leads - property PUT
+    ///
+    /// Create a new lead saved property.
+    ///
+    /// - Returns: URL Request
+    class func putNote() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/property"
+        var downloadTask = put(urlString)
+        return downloadTask
+    }
+
+    /// Leads - search DELETE
+    ///
+    /// Remove a lead saved search.
+    ///
+    /// - Returns: URL Request
+    class func deleteSearch() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/search"
+        var downloadTask = delete(urlString)
+        return downloadTask
+    }
+
+    /// Leads - search GET
+    ///
+    /// Get notes for a lead.
+    ///
+    /// - Returns: URL Request
+    class func getSearch() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/search"
+        var downloadTask = get(urlString)
+        return downloadTask
+    }
+
+    /// Leads - search POST
+    ///
+    /// Update the notes information for one lead specified by the primary request ID.
+    ///
+    /// - Returns: URL Request
+    class func postSearch() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/search"
+        var downloadTask = post(urlString)
+        return downloadTask
+    }
+
+    /// Leads - search PUT
+    ///
+    /// Create a new lead note.
+    ///
+    /// - Returns: URL Request
+    class func putSearch() -> URLRequest {
+        let urlString = "https://api.idxbroker.com/leads/search"
+        var downloadTask = put(urlString)
+        return downloadTask
+    }
 
     /* END LEADS */
 
